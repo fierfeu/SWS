@@ -7,6 +7,9 @@ SWS  -|
       |- access
       |- admin
       |- certificats // contains all SSL certif and is not manage in configuration
+      |- dev
+          | server.cert
+          | server.key
       |- deploy
       |- dev // contains files used only for devlopment purpose : never deployed this folder
         | - test
