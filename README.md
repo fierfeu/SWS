@@ -2,7 +2,7 @@
 Serveur web hhtps et http sous node en js vanilla
 
 ce serveur contien une admin accessible via http et un serveur https pour servir un PWA.
-
+```
 SWS  -|
       |- access
       |- admin
@@ -20,3 +20,4 @@ SWS  -|
         | webHandler.mjs
       | package
       | start
+```
