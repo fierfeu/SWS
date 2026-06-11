@@ -7,7 +7,7 @@ SWS  -|
       |- access
       |- admin
       |- certificats // contains all SSL certif and is not manage in configuration
-      |- dev
+        |- dev
           | server.cert
           | server.key
       |- deploy
