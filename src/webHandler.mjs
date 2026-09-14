@@ -1,8 +1,8 @@
 'use strict'
 import fs from 'fs'
-import urlSiteValidator from './urlSiteValidator.js'
-import targetDefinition from './targetDefinition.js'
-import pageRender from './pageRender.js'
+import urlSiteValidator from './urlSiteValidator.mjs'
+import targetDefinition from './targetDefinition.mjs'
+import pageRender from './pageRender.mjs'
 
 
 

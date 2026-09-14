@@ -1,6 +1,6 @@
 'use strict'
 
-import handler from './webHandler.js';
+import handler from './webHandler.mjs';
 import http from 'http';
 import fs from 'fs';
 
