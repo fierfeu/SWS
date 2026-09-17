@@ -7,13 +7,14 @@ import pageRender from './pageRender.mjs'
 
 
 // Definition de la structure du site em mode KISS
-// Remember taht path are all based on current dir path
+// Remember that the path must not begin with a '/' to let path.resolve working with the correct path.
+// The path must be relative to the SWS/src folder (stored in PATHTO).
 let routesPagesConf ={
-    '/':'/../web/html/admin.html',
-    '/index.html':'/../web/html/admin.html',
-    '/admin' : '/../web/html/admin.html',
-    '/admin.html':'/../web/html/admin.html',
-    '/adminLogo.jpg':'/../web/image/logo.jpg'
+    '/':'../web/html/admin.html',
+    '/index.html':'../web/html/admin.html',
+    '/admin' : '../web/html/admin.html',
+    '/admin.html':'../web/html/admin.html',
+    '/adminLogo.jpg':'../web/image/logo.jpg'
 }
 
 let serverConf = {
