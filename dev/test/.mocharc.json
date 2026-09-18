@@ -3,7 +3,9 @@
     "./dev/test/canary_test.mjs",
     "./dev/test/urlSiteValidator_test.mjs",
     "./dev/test/targetDefinition_test.mjs",
-    "./dev/test/pageRender_test.mjs"
+    "./dev/test/pageRender_test.mjs",
+    "./dev/test/Web_Handler_test.mjs",
+    "./dev/test/httpsServer_test.mjs"
   ],
   "bail": true,
   "timeout": 2000
