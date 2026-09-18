@@ -17,7 +17,7 @@ let routesPagesConf ={
     '/adminLogo.jpg':'../web/image/logo.jpg'
 }
 
-let serverConf = {
+export let serverConf = {
     "pageLoaded": false,
     "packagesLoaded":0,
     "usersDefined":0
@@ -26,8 +26,8 @@ let serverConf = {
 const PATHTO = import.meta.dirname
 
 function retrievePayLoad (req) {
+    req.body=''
     req.on ('data',(chunk)=> {
-        req.body=''
         req.body+=decodeURIComponent(chunk)
     })
     req.on('end',() => {
@@ -61,11 +61,22 @@ export default function handler (req,res) {
                                 if(err) {
                                     res.writeHead(400, {"Content-type":"text/html"})
                                     res.end("<dialog open style=\"text-align:center;color:red\">400 bad route file path <br> Click on backward to go back to form</dialog>")
+                                    return
                                 }
                                 else {
                                     // load datas
                                     let data = fs.readFileSync(filePath,{ encoding: 'utf8' })
                                     data= JSON.parse(data)
+                                    if(Object.keys(data).length===0) {
+                                        res.writeHead(400, {"Content-type":"text/html"})
+                                        res.end("<dialog open style=\"text-align:center;color:red\">400 bad route file content : empty <br> Click on backward to go back to form</dialog>")
+                                        return
+                                    }
+                                    else if(!req.body['singletonName'] || req.body['singletonName']==='') {
+                                        res.writeHead(400, {"Content-type":"text/html"})
+                                        res.end("<dialog open style=\"text-align:center;color:red\">400 bad singleton name : empty <br> Click on backward to go back to form</dialog>")
+                                        return
+                                    }
                                     if(req.body['singletonName'][0]!='/') req.body['singletonName']='/'+req.body['singletonName']
                                     let singleton = data[req.body['singletonName']]
                                     if(singleton) {
@@ -73,6 +84,7 @@ export default function handler (req,res) {
                                             if(err) {
                                                 res.writeHead(400, {"Content-type":"text/html"})
                                                 res.end("<dialog open style=\"text-align:center;color:red\">400 bad singleton name or not reachable on server side <br> Click on backward to go back to form</dialog>")
+                                                return
                                             }
                                             else {
                                                 if(singleton[0]=='/') singleton=singleton.slice(1)
@@ -86,11 +98,18 @@ export default function handler (req,res) {
                                                     if (req.body["webRootPathName"]) {
                                                         req.url=req.body["webRootPathName"]
                                                         rendAGet(404,PATHTO +'../web/html/404.html',req,res)
+                                                        return
+                                                    }
+                                                    else {
+                                                        res.writeHead(400, {"Content-type":"text/html"})
+                                                        res.end("<dialog open style=\"text-align:center;color:red\">400 bad webRootPathName : empty <br> Click on backward to go back to form</dialog>")
+                                                        return
                                                     }
                                                 }
                                                 else {
                                                     res.writeHead(400, {"Content-type":"text/html"})
                                                     res.end("<dialog open style=\"text-align:center;color:red\">400 bad class prototype : no addPackage function available <br> Click on backward to go back to form</dialog>")    
+                                                    return
                                                 }
                                             }
                                         })
@@ -104,6 +123,12 @@ export default function handler (req,res) {
                             })
                             break
                         case 'addAPackage':
+                            console.log("pageDescriptor:", serverConf.pageDescriptor)
+                            if(!serverConf.pageDescriptor) {
+                                res.writeHead(400, {"Content-type":"text/html"})
+                                res.end("<dialog open style=\"text-align:center;color:red\">400 You must define a PWA application first <br> Click on backward to go back to form</dialog>")
+                                return
+                            }
                             let singleton = routesPagesConf[serverConf.pageDescriptor['singletonName']]
                             const data=req.body
                             console.log(singleton)
@@ -121,19 +146,23 @@ export default function handler (req,res) {
                             }
                             break
                         default :
-                            console.log('unrecognized action for POST Method')
+                            //prévoir une entrée dans les logs pour identifier l'ip source associée à la tentative quie n'est pas autorisée
                             res.writeHead(406, {'Content-Type':'txt/html'})
                             res.end('Action requested not recognized')
                             break;
                     }
                 })
                 break
-            case 'PUT':
             case 'GET':
                 let code = 404;
                 let target =PATHTO +'../web/html/404.html'; //TODO remove this hard coded value but today it's simple
                 rendAGet(code,target,req,res)
                 break
+            default :
+                //prévoir une entrée dans les logs pour identifier l'ip source associée à la tentative quie n'est pas autorisée
+                res.writeHead(405, {'Content-Type':'txt/html'})
+                res.end('HTTP Method Not Allowed')
+                break;
         }
 
     

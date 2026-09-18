@@ -6,6 +6,9 @@ export default class ResponseFake {
         this.statusCode = 200;
         this.body = null;
         this.ended = false;
+        this.finished = new Promise((resolve) => {
+            this._resolveFinished = resolve;
+        });
     }
 
     get Headers() {
@@ -48,6 +51,7 @@ export default class ResponseFake {
             this.write(data);
         }
         this.ended = true;
+        this._resolveFinished();
     }
 }
 
